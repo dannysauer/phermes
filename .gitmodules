@@ -1,0 +1,6 @@
+[submodule "cases/PiHoles"]
+	path = cases/PiHoles
+	url = https://github.com/daprice/PiHoles.git
+[submodule "cases/dome/PiHoles"]
+	path = cases/dome/PiHoles
+	url = https://github.com/daprice/PiHoles.git
