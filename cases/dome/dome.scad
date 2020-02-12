@@ -8,7 +8,7 @@
 // https://github.com/daprice/PiHoles
 use <PiHoles/PiHoles.scad>
 // https://github.com/diara628/MCAD
-use <MCAD/shapes.scad>
+//use <MCAD/shapes.scad>
 
 // padding around pi zero
 padding = 5;
