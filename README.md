@@ -1,11 +1,15 @@
 # phermes
 python alerting device using a raspberry pi zero
 
-New to submodules?  After you check this out, run:
+## Developers:
+New to submodules?  Clone this using `git clone --recurse-submodules
+git@github.com:dannysauer/phermes.git`
+
+Forget to do that when you cloned?  Run: `git submodule update --init
+--recursive`
+
+Either way, to automatically update submodules on future `git pull`s:
 ```
-git submodule update --init --recursive
-```
-To automatically update submodules on pull:
-```
-git config --global submodule.recurse true
+git config --local submodule.recurse true
+
 ```
