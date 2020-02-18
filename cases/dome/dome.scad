@@ -58,17 +58,27 @@ module domed_box(r, h, bt, dt){
             }
         }
         // holes
+        // TODO: set up a to pick 1-5 holes based on param
         offset = ((r-led_hole)/2) + (led_hole/2);
-        translate([0,0,h-bt]){
+        translate([0,0,h-bt]){ // center
           cylinder(r=led_hole/2, h=bt);
         }
-        translate([offset,0,h-bt]){
+        translate([offset,0,h-bt]){ //left
           cylinder(r=led_hole/2, h=bt);
         }
-        translate([-offset,0,h-bt]){
+        translate([-offset,0,h-bt]){ //right
           cylinder(r=led_hole/2, h=bt);
         }
-        translate([0,offset,h-bt]){
+        // for four LEDs, use this one
+        /*translate([0,offset,h-bt]){ // front
+          cylinder(r=led_hole/2, h=bt);
+        }
+        */
+        // for five LEDs, use these two
+        translate([offset/2,offset,h-bt]){ // front left
+          cylinder(r=led_hole/2, h=bt);
+        }
+        translate([-offset/2,offset,h-bt]){ // front right
           cylinder(r=led_hole/2, h=bt);
         }
     }
