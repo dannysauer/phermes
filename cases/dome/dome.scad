@@ -10,19 +10,24 @@ use <PiHoles/PiHoles.scad>
 // https://github.com/diara628/MCAD
 //use <MCAD/shapes.scad>
 
-// padding around pi zero
+// which kind of Pi?
+pi_type = "Zero";
+
+// padding around pi
 padding = 5;
 // base diameter
-width = 2 * ( piBoardDim("Zero")[1] + padding);
+width = 2 * ( piBoardDim(pi_type)[1] + padding);
 // base height
-height = piBoardDim("Zero")[0] + (2 * padding);
-// 1.5mm thick wall
-wall_thick = 1.5;
+height = piBoardDim(pi_type)[0] + (2 * padding);
+// wall on dome
+dome_thick = 1;
+// 2mm thick wall on base / LED plate
+base_thick = 2;
 // LED hole
 led_hole =  12;
 
 post_height = 5;
-cable_diameter = 3;
+cable_diameter = 4.5;
 
 /****************************************/
 
@@ -31,40 +36,40 @@ cable_diameter = 3;
   r is radius
   t is wall thickness
 */
-module domed_box(r, h, t){
+module domed_box(r, h, bt, dt){
     // need to clear half an LED and the board, plus the board padding
     extra_back_depth = led_hole/2 
         + post_height
-        + piBoardDim("Zero")[2]
+        + piBoardDim(pi_type)[2]
         + padding;
 
     difference(){
         union(){
             // half shell
             rotate_extrude(angle=180){
-                _box(r,h,t);
+                _box(r,h,bt,dt);
                 }
             rotate([90,0,0])
                 linear_extrude(extra_back_depth){
                     union(){
-                    _box(r,h,t);
-                    mirror([1,0,0]) _box(r,h,t);
+                    _box(r,h,bt,dt);
+                    mirror([1,0,0]) _box(r,h,bt,dt);
                     }
             }
         }
         // holes
         offset = ((r-led_hole)/2) + (led_hole/2);
-        translate([0,0,h-t]){
-          cylinder(r=led_hole/2, h=t);
+        translate([0,0,h-bt]){
+          cylinder(r=led_hole/2, h=bt);
         }
-        translate([offset,0,h-t]){
-          cylinder(r=led_hole/2, h=t);
+        translate([offset,0,h-bt]){
+          cylinder(r=led_hole/2, h=bt);
         }
-        translate([-offset,0,h-t]){
-          cylinder(r=led_hole/2, h=t);
+        translate([-offset,0,h-bt]){
+          cylinder(r=led_hole/2, h=bt);
         }
-        translate([0,offset,h-t]){
-          cylinder(r=led_hole/2, h=t);
+        translate([0,offset,h-bt]){
+          cylinder(r=led_hole/2, h=bt);
         }
     }
     // back
@@ -72,7 +77,7 @@ module domed_box(r, h, t){
         // back panel
         translate([0,-extra_back_depth,0]){
             rotate([90,0,0]){
-                linear_extrude(t){
+                linear_extrude(bt){
                     square([r,h]);
                     translate([-r,0]){
                         square([r,h]);
@@ -86,7 +91,7 @@ module domed_box(r, h, t){
         // wire hole
         translate([(r/2),-extra_back_depth,0]){
             rotate([90,0,0]){
-                linear_extrude(t){
+                linear_extrude(bt){
                     union(){
                         translate([0,cable_diameter/2,0]) circle(cable_diameter/2);
                         square(cable_diameter, center=true);
@@ -98,12 +103,12 @@ module domed_box(r, h, t){
     mirror([1,0,0])
       translate([0, -extra_back_depth, 0])
         rotate([0,-90,-90])
-          piPosts("Zero", post_height);
+          piPosts(pi_type, post_height);
 } 
 
-module _box(r,h,t){
-    _base(r,h,t);
-    _dome(r,h,t);
+module _box(r,h,bt,dt){
+    _base(r,h,bt);
+    _dome(r,h,dt);
 }
 module _base(r,h,t){
     difference(){
@@ -123,4 +128,4 @@ module _dome(r,h,t){
     }
 }
 
-domed_box(width/2, height, wall_thick, $fn=100);
+domed_box(width/2, height, base_thick, dome_thick, $fn=100);
